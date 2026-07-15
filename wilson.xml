@@ -9,7 +9,7 @@
       <actuator name="flow-controller" value="200" />
     </config>
     <loop name="main-loop">
-      <scan mode="valuelist">
+      <scan mode="valuelist"><!-- should ask for a file with list of values !-->
         <value name="flows"/>
         <value name="temperature"/>
       </scan>

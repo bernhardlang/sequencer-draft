@@ -11,7 +11,7 @@
       <detector name="thermo" action="snap" />
     </acquire>
     <bifurcation source="thermo" property="temperature">
-      <case smaller_than="50" goto="wait-acqusition" />
+      <case smaller_than="{end-temperature}" goto="wait-acqusition" />
     </bifurcation>
     <config name="finish">
       <acturator name="heater" action="off" />
