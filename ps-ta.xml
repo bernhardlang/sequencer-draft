@@ -10,8 +10,7 @@
     <wait name="confirm-white" mode="one">
       <condition source="gui" signal="user_response" />
     </wait>
-    <bifurcation>
-      <source name="gui" property="user_response" />
+    <bifurcation source="gui" property="user_response">
       <case value="repeat" goto="prepare-dark" />  
       <case value="abort" goto="finish" />  
     </bifurcation>

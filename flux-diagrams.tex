@@ -2,6 +2,7 @@
 \usepackage{a4wide,tikz}
 \advance\topmargin-6\baselineskip
 \advance\textheight6\baselineskip
+\parindent=0cm
 \tikzset{gbox/.style={
     rectangle,
     draw, 
@@ -10,12 +11,11 @@
     minimum height=0.8cm,
     minimum width=1.8cm
   },
-  rbox/.style={gbox,rounded corners},
-  confbox/.style={rbox,fill=green!40},
-  subbox/.style={gbox,fill=blue!20},
+  confbox/.style={gbox,rounded corners,fill=green!40},
+  parbox/.style={gbox,rounded corners,fill=yellow!40},
   questbox/.style={gbox,fill=orange!20},
-  ebox/.style={gbox,fill=red!20},
-  evbox/.style={rbox,fill=green!10},
+  fluxbox/.style={gbox,fill=blue!20},
+  evbox/.style={gbox,rounded corners,fill=green!10},
 }
 \begin{document}
 \subsection*{Transient Absorption}
@@ -24,8 +24,8 @@
   \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
     \node (ta) {transient absorption}; \\
     \node [confbox] (start) {start camera}; \\
-    \node [subbox] (dark) {\fbox{measure dark}}; \\
-    \node [subbox] (ref) {\fbox{measure reference}}; \\
+    \node [fluxbox] (dark) {\fbox{measure dark}}; \\
+    \node [fluxbox] (ref) {\fbox{measure reference}}; \\
     \node [confbox] (confirm) {get user confirmation}; \\
     \node [questbox] (repeat) {Repeat?}; \& \& \node (repeat2) {}; \\
     \node [questbox] (abort) {Abort?}; \& \& \& \node (abort2) {}; \\
@@ -33,10 +33,10 @@
     \node [confbox] (setdelay) {set delay}; \\
     \node [confbox] (acquire) {acquire}; \\
     \node [questbox] (darkok) {Dark drifted?}; \& \node (darkok2) {}; \\
-    \node [subbox] (redark) {\fbox{measure dark}}; \& \node (redark2) {}; \\
+    \node [fluxbox] (redark) {\fbox{measure dark}}; \& \node (redark2) {}; \\
     \node [questbox] (loop) {Finished?}; \& \& \node (loop2) {}; \\
     \node [confbox] (cleanup) {stop hardware}; \\
-    \node [ebox] (end) {End}; \\
+    \node [fluxbox] (end) {End}; \\
   };
   \draw[thick,->] (start) -- (dark);
   \draw[thick,->] (dark) -- (ref);
@@ -66,7 +66,7 @@
     \node (dark) {measure dark}; \\
     \node [confbox] (prep) { close shutters }; \\
     \node [confbox] (acquire) { acquire }; \\
-    \node [ebox] (end) { return }; \\
+    \node [fluxbox] (end) { return }; \\
   };
   \draw[thick,->] (prep) -- (acquire);
   \draw[thick,->] (acquire) -- (end);
@@ -79,7 +79,7 @@
     \node (ref) {measure reference}; \\
     \node [confbox] (prep) { close shutter 1, open shutter 2 }; \\
     \node [confbox] (acquire) { acquire }; \\
-    \node [ebox] (end) { return }; \\
+    \node [fluxbox] (end) { return }; \\
   };
   \draw[thick,->] (prep) -- (acquire);
   \draw[thick,->] (acquire) -- (end);
@@ -91,7 +91,7 @@
   \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
     \node [evbox] (error) {error}; \\
     \node [confbox] (gui) { user confirmation }; \\
-    \node [ebox] (end) { stop hardware }; \\
+    \node [fluxbox] (end) { stop hardware }; \\
   };
   \draw[thick,->] (error) -- (gui);
   \draw[thick,->] (gui) -- (end);
@@ -102,7 +102,7 @@
 \begin{tikzpicture}[scale=0.5]
   \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
     \node [evbox] (break) {break}; \\
-    \node [ebox] (end) { stop hardware }; \\
+    \node [fluxbox] (end) { stop hardware }; \\
   };
   \draw[thick,->] (break) -- (end);
 \end{tikzpicture}
@@ -130,7 +130,7 @@
     \node [questbox] (timexp) {measurement timer expired?}; 
     \& \& \node (timexp2) {}; \\
     \node [confbox] (cleanup) {lamp off, excitation laser off}; \\
-    \node [ebox] (end) {end}; \\
+    \node [fluxbox] (end) {end}; \\
   };
   \draw[thick,->] (dark) -- (ref);
   \draw[thick,->] (ref) -- (conf1);
@@ -156,7 +156,7 @@
   \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
     \node [evbox] (error) {error}; \\
     \node [confbox] (gui) { user confirmation }; \\
-    \node [ebox] (end) { lamp off etc. }; \\
+    \node [fluxbox] (end) { lamp off etc. }; \\
   };
   \draw[thick,->] (error) -- (gui);
   \draw[thick,->] (gui) -- (end);
@@ -167,7 +167,7 @@
 \begin{tikzpicture}[scale=0.5]
   \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
     \node [evbox] (break) {break}; \\
-    \node [ebox] (end) { lamp off etc. }; \\
+    \node [fluxbox] (end) { lamp off etc. }; \\
   };
   \draw[thick,->] (break) -- (end);
 \end{tikzpicture}
@@ -185,7 +185,7 @@
     \node [questbox] (finished) {$t>t_{\mathrm{max}}$?};
     \& \node (finished2) {}; \\
     \node [confbox] (heateroff) {heater off}; \\
-    \node [ebox] (end) {end}; \\
+    \node [fluxbox] (end) {end}; \\
   };
   \draw[thick,->] (heateron) -- (wait);
   \draw[thick,->] (wait) -- (acquire);
@@ -196,27 +196,52 @@
   \draw[thick,->] (heateroff) -- (end);
 \end{tikzpicture}}%
 \parbox{0.5\textwidth}{%
-\centerline{%
 \begin{tikzpicture}[scale=0.5]
   \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
     \node [evbox] (error) {error}; \\
     \node [confbox] (gui) { user confirmation }; \\
-    \node [ebox] (end) { heater off }; \\
+    \node [fluxbox] (end) { heater off }; \\
   };
   \draw[thick,->] (error) -- (gui);
   \draw[thick,->] (gui) -- (end);
-\end{tikzpicture}}
+\end{tikzpicture}
 \vspace{0.5cm}
 
-\centerline{%
 \begin{tikzpicture}[scale=0.5]
   \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
     \node [evbox] (break) {break}; \\
-    \node [ebox] (end) { heater off }; \\
+    \node [fluxbox] (end) { heater off }; \\
   };
   \draw[thick,->] (break) -- (end);
 \end{tikzpicture}
-}}
+}
 
+\clearpage
+\subsection*{Wilson experiemnt}
+
+\parbox{0.5\textwidth}{%
+\begin{tikzpicture}[scale=0.5]
+  \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
+    \node [parbox] (init) {set flow \\ set temperature \\ carrousel to waste}; \\
+    \node [confbox] (initflow) {flow 200\,$\mu$l}; \\
+    \node [parbox] (set) {set flow \\ set temperature \\ carrousel to waste}; \\
+    \node [confbox] (process)
+          {flow 200\,$\mu$l \\ next falcon \\ start acquisition \\
+            flow 2000\,$\mu$l \\ stop acquisition \\ carrousel to waste}; \\
+    \node [questbox] (loop) {last recipe on list?}; \& \node (loop2) {}; \\
+    \node [parbox] (cleanup)
+          {set flow \\ set temperature \\ carrousel to waste}; \\
+    \node [confbox] (cleanupflow) {flow 500\,$\mu$l}; \\
+    \node [fluxbox] (end) {end}; \\
+  };
+  \draw[thick,->] (init) -- (initflow);
+  \draw[thick,->] (initflow) -- (set);
+  \draw[thick,->] (set) -- (process);
+  \draw[thick,->] (process) -- (loop);
+  \draw[thick,->] (loop) -- node [midway,right] {Y} (cleanup);
+  \draw[thick,->] (loop) -- node [midway,below] {N} (loop2.center) |- (set);
+  \draw[thick,->] (cleanup) -- (cleanupflow);
+  \draw[thick,->] (cleanupflow) -- (end);
+\end{tikzpicture}}%
 
 \end{document}
