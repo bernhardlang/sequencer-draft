@@ -18,7 +18,8 @@
     </config>
     <loop name="main-loop">
       <scan mode="linear">
-        <actuator name="delay-line" from="-1e-12" to="1e-12" step="1e-14"/>
+        <actuator name="delay-line" from="{scan-from}" to="{scan-to}"
+                  step="{scan-steps}" />
       </scan>
       <wait name="acquire">
         <condition source="data-processor" signal="data-done"/>
@@ -67,7 +68,8 @@
   <!-- 2D scan !-->
   <loop name="main-loop">
     <scan mode="linear">
-      <actuator name="delay-line" from="-1e-12" to="1e-12" step="1e-14" />
+      <actuator name="delay-line" from="{scan-from}" to="{scan-to}"
+                step="{scan-steps}" />
       <actuator name="polarizer" values="parallel,perpendicular,magic" />
     </scan>
     <wait name="acquire-dark">
@@ -82,10 +84,10 @@
        4) delays backward with magic angle 2 polarization
        !-->
   <loop name="main-loop">
-    <scan>
+    <scan mode="linear">
       <actuator name="polarizer" values="par,magic1,perp,magic2" />
-      <actuator mode="both-directions" name="delay-line" from="-1e-12"
-                to="1e-12" step="1e-14" />
+      <actuator mode="both-directions" name="delay-line" from="{scan-from}"
+                to="{scan-to}" step="{scan-steps}" />
     </scan>
     <wait name="acquire-dark">
       <condition source="data-processor" signal="data-done"/>

@@ -15,8 +15,10 @@
     <config name="prepare-main">
       <actuator name="probe-shutter" value="1" />
       <actuator name="excitation-shutter" value="1" />
-      <actuator name="data-processor" lower_limit="{lower-limit}" />
-      <actuator name="data-processor" upper_limit="{upper-limit}" />
+      <actuator name="data-processor" property="lower_limit"
+                value="{lower-limit}" />
+      <actuator name="data-processor" property="upper_limit"
+                value="{upper-limit}" />
       <actuator name="polarizer" value="parallel" />
       <actuator name="delay-line" value="{scan-from}" asynchron="true" />
     </config>
@@ -69,14 +71,14 @@
 
   <tasks name="exit_upper_limit" on_event="exit_upper_limit"
 	 source="data-processor">
-    <config>
+    <config name="on-exit-upper">
       <actuator name="polarizer" values="magic1,magic2" />
     </config>
   </tasks>  
 
   <tasks name="exit_lower_limit" on_event="exit_lower_limit"
 	 source="data-processor">
-    <config>
+    <config name="on-exit-lower">
       <actuator name="polarizer" values="perpendicular,parallel" />
     </config>
   </tasks>  

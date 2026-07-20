@@ -20,12 +20,13 @@
     </config>
     <loop name="main-loop" type="1D" actuator="delay-generator">
       <scan mode="linlog">
-        <actuator name="delay-generator" lin_from="-1e-9" lin_to="1e-9"
-                  lin_steps="21" log_to="5e-5" points_per_decade="30"
-                  log_neg="-1e-6" />
+        <actuator name="delay-generator" lin_from="{lin-from}" lin_to="{lin-to}"
+                  lin_steps="{lin-steps}" log_to="{log-to}"
+                  points_per_decade="{points-per-decade}"
+                  neg_log_from="{neg-log-from"} />
 	<endcondition source="data-processor" property="scan-done" />
       </scan>
-      <wait name="acquire"> <!-- one|all !-->
+      <wait name="acquire">
         <condition source="data-processor" signal="data-done"/>
       </wait>
     </loop>
@@ -70,7 +71,7 @@
 
   <tasks name="error" on_event="error" source="any">
     <wait name="error">
-      <condition name="gui" signal="user_response" />
+      <condition source="gui" signal="user_response" />
     </wait>    
     <goto name="finish" />
   </tasks>

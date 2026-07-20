@@ -2,7 +2,6 @@
 \usepackage{a4wide,tikz}
 \advance\topmargin-6\baselineskip
 \advance\textheight6\baselineskip
-\parindent=0cm
 \tikzset{gbox/.style={
     rectangle,
     draw, 
@@ -18,7 +17,60 @@
   evbox/.style={gbox,rounded corners,fill=green!10},
 }
 \begin{document}
+\section*{Legend}
+
+The color coding in the flux diagrams is as follows:
+\begin{description}
+\item[green] actions performed using the cconfigurator, sequential
+\item[yellow] actions performed using the cconfigurator, parallel
+\item[blue] subroutines, jumps and returns
+\item[orange] branches
+\item[light green] branches triggered by events
+\end{description}
+
+\section*{Tags}
+
+\begin{description}
+\item[config] configurator actions
+  \begin{description}
+    \item[actuator] name, value
+    \item[actuator] name, values: loop through values upon multiple occurence
+    \item[actuator] name, action
+    \item[detector] name, action
+  \end{description}
+\item[wait] wait on a Qt signal
+  \begin{description}
+    \item[condition] source, signal
+  \end{description}
+\item[bifurcation] source, property
+  \begin{description}
+    \item[case] value, goto|instructions
+    \item[case] smaller-than, goto|instructions
+    \item[case] smaller-than-or-equal, goto|instructions
+    \item[case] larger-than, goto|instructions
+    \item[case] larger-than-or-equal, goto|instructions
+    \item[default] goto|instructions
+  \end{description}
+\item[loop] scan definition followed by instruction tags
+  \begin{description}
+    \item[scan] mode
+    \begin{description}
+      \item[actuator] name, values
+      \item[actuator] name, from, to, steps
+      \item[actuator] name, lin-from, lin-to, lin-steps, log-to,
+        points-per-decade[, neg-log-to]
+      \item[endcondition] source, property (bool)
+    \end{description}
+  \end{description}
+\item[sub] name of subroutine
+\item[return] return from subroutine / event handler
+\item[goto] name item to jump to
+\item[event] list of instruction tags entered upon event, ends either with goto
+  or return tag
+\end{description}
+
 \subsection*{Transient Absorption}
+
 \parbox{0.5\textwidth}{%
 \begin{tikzpicture}[scale=0.5]
   \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
@@ -229,9 +281,12 @@ The former may have to be re-recorded upon thermnal drifts.
 \parbox{0.5\textwidth}{%
 \begin{tikzpicture}[scale=0.5]
   \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
-    \node [parbox] (init) {set flow \\ set temperature \\ carrousel to waste}; \\
+    \node [parbox] (init)
+          {set initial flow \\ set initial temperature \\ carrousel to waste}; \\
     \node [confbox] (initflow) {flow 200\,$\mu$l}; \\
-    \node [parbox] (set) {set flow \\ set temperature \\ carrousel to waste}; \\
+    \node [parbox] (set)
+          {according to current recipe: \\ set flow \\ set temperature \\
+            carrousel to waste}; \\
     \node [confbox] (process)
           {flow 200\,$\mu$l \\ next falcon \\ start acquisition \\
             flow 2000\,$\mu$l \\ stop acquisition \\ carrousel to waste}; \\
