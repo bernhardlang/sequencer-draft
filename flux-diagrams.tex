@@ -71,6 +71,13 @@ The color coding in the flux diagrams is as follows:
 
 \subsection*{Transient Absorption}
 
+Measure absorption spectra as a function of delay between excitation and probe pulse.
+%
+As preparation measure the cameras' dark signal and the spectrum of the probe light.
+%
+The former may have to be re-recorded upon thermnal drifts.
+%
+
 \parbox{0.5\textwidth}{%
 \begin{tikzpicture}[scale=0.5]
   \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
@@ -160,12 +167,101 @@ The color coding in the flux diagrams is as follows:
 \end{tikzpicture}
 }}
 
-Measure absorption spectra as a function of delay between excitation and probe pulse.
+\subsection*{Variant Rapid Scan Transient Absorption}
+
+Instead of scanning the time dealy in consecutive steps in a step-scan fahsion, the optical delay line is rapidly moved forth and back.
 %
-As preparation measure the cameras' dark signal and the spectrum of the probe light.
+Its actual position is recorded together with the camera at each trigger from the laser system and the resulting spectra are sorted into the corresponding time bins.
 %
-The former may have to be re-recorded upon thermnal drifts.
+One the target, i.e.\ the end of the scanned range, has been reached, the actuator notifes the sequencer about this event.
 %
+By means of an asynchrous or parallel or history state mechanism, the sequencer
+sends the delay line to the other end of the scan range and continues acquiring.
+%
+When approaching the target at one end of the scanned range, another signal emitted from the actuator or the data processing unit may be used to notify an end of range and use the remining strech to the real end to turn a polarizer or perform  any other needed parameter or hardware update.
+%
+
+\parbox{0.5\textwidth}{%
+\begin{tikzpicture}[scale=0.5]
+  \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
+    \node (ta) {rapid scan TA}; \\
+    \node [confbox] (start) {start camera}; \\
+    \node [fluxbox] (dark) {\fbox{measure dark}}; \\
+    \node [fluxbox] (ref) {\fbox{measure reference}}; \\
+    \node [confbox] (confirm) {get user confirmation}; \\
+    \node [questbox] (repeat) {Repeat?}; \& \& \node (repeat2) {}; \\
+    \node [questbox] (abort) {Abort?}; \& \& \node (abort2) {}; \\
+    \node [confbox] (prepmain)
+          {shutter 1+2 open \\ set data processor limits \\ set polarizer \\
+          start delay line asynchonously}; \\
+    \node [confbox] (acquire) {acquire \\ until data processor done}; \\
+    \node [confbox] (cleanup) {stop hardware}; \\
+    \node [fluxbox] (end) {End}; \\
+  };
+  \draw[thick,->] (start) -- (dark);
+  \draw[thick,->] (dark) -- (ref);
+  \draw[thick,->] (ref) -- (confirm);
+  \draw[thick,->] (confirm) -- (repeat);
+  \draw[thick,->] (repeat) -- node [midway,right] {N} (abort);
+  \draw[thick,->] (repeat) -- node [midway,below] {Y} (repeat2.center)
+  |- (dark);
+  \draw[thick,->] (abort) -- node [midway,right] {N} (prepmain);
+  \draw[thick,->] (abort) -- node [midway,above] {Y} (abort2.center)
+  |- (cleanup);
+  \draw[thick,->] (prepmain) -- (acquire);
+  \draw[thick,->] (acquire) -- (cleanup);
+  \draw[thick,->] (cleanup) -- (end);
+\end{tikzpicture}}%
+\parbox{0.5\textwidth}{%
+\centerline{%
+\begin{tikzpicture}[scale=0.5]
+  \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
+    \node [evbox] (on-target) {on target}; \\
+    \node [confbox] (delay) {restart delay}; \\
+    \node [fluxbox] (end) { return }; \\
+  };
+  \draw[thick,->] (on-target) -- (delay);
+  \draw[thick,->] (delay) -- (end);
+\end{tikzpicture}}
+\vspace{0.5cm}
+
+\centerline{%
+\begin{tikzpicture}[scale=0.5]
+  \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
+    \node [evbox] (upper-limit) {upper limit exceeded}; \\
+    \node [confbox] (polarizer) {polarizer to magic1/2}; \\
+    \node [fluxbox] (end) { return }; \\
+  };
+  \draw[thick,->] (on-target) -- (delay);
+  \draw[thick,->] (delay) -- (end);
+\end{tikzpicture}}
+\vspace{0.5cm}
+
+\centerline{%
+\begin{tikzpicture}[scale=0.5]
+  \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
+    \node [evbox] (upper-limit) {upper limit exceeded}; \\
+    \node [confbox] (polarizer) {polarizer to magic1/2}; \\
+    \node [fluxbox] (end) { return }; \\
+  };
+  \draw[thick,->] (upper-limit) -- (polarizer);
+  \draw[thick,->] (polarizer) -- (end);
+\end{tikzpicture}}
+\vspace{0.5cm}
+
+\centerline{%
+\begin{tikzpicture}[scale=0.5]
+  \matrix[column sep=3mm,row sep=8mm,ampersand replacement=\&,fill=black!10] {
+    \node [evbox] (lower-limit) {lower limit exceeded}; \\
+    \node [confbox] (polarizer) {polarizer to parallele/perp.}; \\
+    \node [fluxbox] (end) { return }; \\
+  };
+  \draw[thick,->] (lower-limit) -- (polarizer);
+  \draw[thick,->] (polarizer) -- (end);
+\end{tikzpicture}}
+}
+
+Dark, reference, break and arror as with normal transient absorption.
 
 \subsection*{Photochemical Reaction}
 
